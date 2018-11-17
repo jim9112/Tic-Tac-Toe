@@ -2,6 +2,20 @@ const main = document.querySelector('body');
 const board = document.getElementById('board');
 const player1 = document.getElementById('player1');
 const player2 = document.getElementById('player2');
+const boxes = document.querySelector('.boxes');
+const box = document.getElementsByClassName("box");
+let players = [
+    {
+        playerName: '',
+        playerPiece: 'o',
+        playerScore: [0,0,0,0,0,0,0,0,0]
+    },
+    {
+        playerName: '',
+        playerPiece: 'x',
+        playerScore: [0,0,0,0,0,0,0,0,0]
+    }
+];
 
 var trackIfPlayer1Turn = true;
 var gameIsDone = false;
@@ -39,7 +53,6 @@ const beginGame = () => {
 // function to trigger player moves
 const nextMove = () => {
     console.log(trackIfPlayer1Turn);
-    const boxes = document.querySelector('.boxes');
     movePreview();
     boxes.addEventListener('click', (e) => {
         if (trackIfPlayer1Turn === true) {
@@ -58,12 +71,25 @@ const nextMove = () => {
 
 // function to preview the players move when the mouse is hovered over
 const movePreview = () => {}
-const boxes = document.querySelector('.boxes');
 boxes.addEventListener('mouseover', (e)=>{
-    if (trackIfPlayer1Turn){
+    if (trackIfPlayer1Turn && e.target.className === 'box'){
         e.target.style = 'background-image: url(img/o.svg);';
-    } else {
+    } else if(!trackIfPlayer1Turn && e.target.className === 'box'){
         e.target.style = 'background-image: url(img/x.svg);';
     }
 boxes.addEventListener('mouseout', (e) => e.target.style = '');
 });
+
+const scoring = () => {
+    
+    for (i=0; i<box.length;i++){
+        console.log(box[i].className);
+        if (box[i].className === 'box box-filled-1') {
+            players[0].playerScore[i] = 1;
+            console.log('test');
+        } else if (box[i].className === 'box box-filled-2') {
+            players[1].playerScore[i] = 1;
+            console.log('test');
+        }
+    }
+};
