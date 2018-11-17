@@ -4,6 +4,8 @@ const player1 = document.getElementById('player1');
 const player2 = document.getElementById('player2');
 const boxes = document.querySelector('.boxes');
 const box = document.getElementsByClassName("box");
+
+// An array of objects that save data about the two players
 let players = [
     {
         playerName: '',
@@ -23,6 +25,8 @@ var gameIsDone = false;
 // changes current page to be replaced with another
 const changeElement = (element, display) => element.style.display = display;
 
+
+// function creates the start page
 const createStartPage = () => {
     const startPageContent = document.createElement('div');
     startPageContent.className = 'screen screen-start';
@@ -52,7 +56,6 @@ const beginGame = () => {
 
 // function to trigger player moves
 const nextMove = () => {
-    console.log(trackIfPlayer1Turn);
     movePreview();
     boxes.addEventListener('click', (e) => {
         if (trackIfPlayer1Turn === true) {
@@ -80,16 +83,13 @@ boxes.addEventListener('mouseover', (e)=>{
 boxes.addEventListener('mouseout', (e) => e.target.style = '');
 });
 
+// Function checks the board and adjusts each players score
 const scoring = () => {
-    
     for (i=0; i<box.length;i++){
-        console.log(box[i].className);
         if (box[i].className === 'box box-filled-1') {
             players[0].playerScore[i] = 1;
-            console.log('test');
         } else if (box[i].className === 'box box-filled-2') {
             players[1].playerScore[i] = 1;
-            console.log('test');
         }
     }
 };
