@@ -21,6 +21,7 @@ const createStartPage = () => {
 changeElement(board, 'none');
 createStartPage();
 
+// event listener for start button
 const startButton = document.querySelector('.button');
 startButton.addEventListener('click', (e) => {
     const start = document.getElementById('start');
@@ -34,20 +35,35 @@ const beginGame = () => {
         nextMove();
 };
 
+
+// function to trigger player moves
 const nextMove = () => {
     console.log(trackIfPlayer1Turn);
     const boxes = document.querySelector('.boxes');
-        boxes.addEventListener('click', (e) => {
-            if (trackIfPlayer1Turn === true) {
-                e.target.className = 'box box-filled-1';
-                trackIfPlayer1Turn = false;
-                player1.className = 'players';
-                player2.className = 'players active';
-            } else {
-                e.target.className = 'box box-filled-2';
-                trackIfPlayer1Turn = true;
-                player2.className = 'players';
-                player1.className = 'players active';
-            }
-        });
-}
+    movePreview();
+    boxes.addEventListener('click', (e) => {
+        if (trackIfPlayer1Turn === true) {
+            e.target.className = 'box box-filled-1';
+            trackIfPlayer1Turn = false;
+            player1.className = 'players';
+            player2.className = 'players active';
+        } else {
+            e.target.className = 'box box-filled-2';
+            trackIfPlayer1Turn = true;
+            player2.className = 'players';
+            player1.className = 'players active';
+        }
+    });
+};
+
+// function to preview the players move when the mouse is hovered over
+const movePreview = () => {}
+const boxes = document.querySelector('.boxes');
+boxes.addEventListener('mouseover', (e)=>{
+    if (trackIfPlayer1Turn){
+        e.target.style = 'background-image: url(img/o.svg);';
+    } else {
+        e.target.style = 'background-image: url(img/x.svg);';
+    }
+boxes.addEventListener('mouseout', (e) => e.target.style = '');
+});
