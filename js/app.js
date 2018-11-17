@@ -1,6 +1,7 @@
 const main = document.querySelector('body');
 const board = document.getElementById('board');
 const player1 = document.getElementById('player1');
+const player2 = document.getElementById('player2');
 
 var trackIfPlayer1Turn = true;
 var gameIsDone = false;
@@ -30,11 +31,23 @@ startButton.addEventListener('click', (e) => {
 
 const beginGame = () => {
         player1.className = 'players active'; 
-        const boxes = document.querySelector('.boxes');
-        boxes.addEventListener('click', (e) => {
-            console.log(e.target.element);
-            e.target.className = 'box box-filled-1';
-        }); 
+        nextMove();
 };
 
-
+const nextMove = () => {
+    console.log(trackIfPlayer1Turn);
+    const boxes = document.querySelector('.boxes');
+        boxes.addEventListener('click', (e) => {
+            if (trackIfPlayer1Turn === true) {
+                e.target.className = 'box box-filled-1';
+                trackIfPlayer1Turn = false;
+                player1.className = 'players';
+                player2.className = 'players active';
+            } else {
+                e.target.className = 'box box-filled-2';
+                trackIfPlayer1Turn = true;
+                player2.className = 'players';
+                player1.className = 'players active';
+            }
+        });
+}
