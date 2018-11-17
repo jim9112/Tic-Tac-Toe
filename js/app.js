@@ -5,16 +5,21 @@ const player2 = document.getElementById('player2');
 const boxes = document.querySelector('.boxes');
 const box = document.getElementsByClassName("box");
 
+// winning combination 
+const winningNumbers = [0,1,2,0,3,6,3,4,5,6,7,8,1,4,7,2,5,8,0,4,8,2,4,6];
+let tempArr =[];
 // An array of objects that save data about the two players
 let players = [
     {
         playerName: '',
         playerPiece: 'o',
+        playerClass: 'box box-filled-1',
         playerScore: [0,0,0,0,0,0,0,0,0]
     },
     {
         playerName: '',
         playerPiece: 'x',
+        playerClass: 'box box-filled-2',
         playerScore: [0,0,0,0,0,0,0,0,0]
     }
 ];
@@ -73,7 +78,7 @@ const nextMove = () => {
 };
 
 // function to preview the players move when the mouse is hovered over
-const movePreview = () => {}
+const movePreview = () => {
 boxes.addEventListener('mouseover', (e)=>{
     if (trackIfPlayer1Turn && e.target.className === 'box'){
         e.target.style = 'background-image: url(img/o.svg);';
@@ -82,7 +87,7 @@ boxes.addEventListener('mouseover', (e)=>{
     }
 boxes.addEventListener('mouseout', (e) => e.target.style = '');
 });
-
+};
 // Function checks the board and adjusts each players score
 const scoring = () => {
     for (i=0; i<box.length;i++){
@@ -90,6 +95,17 @@ const scoring = () => {
             players[0].playerScore[i] = 1;
         } else if (box[i].className === 'box box-filled-2') {
             players[1].playerScore[i] = 1;
+        }
+    }
+};
+
+const checkForWin = (player) => {
+    for (i=0; i<winningNumbers.length; i=i+3){
+        let answerArr = [winningNumbers[i], winningNumbers[i+1], winningNumbers[i+2]];
+        tempArr = [players[player].playerScore[answerArr[0]], players[player].playerScore[answerArr[1]], players[player].playerScore[answerArr[2]]];
+        console.log(tempArr);
+        if (tempArr[0] === 1 && tempArr[1] === 1 && tempArr[2] === 1){
+            console.log('winner');
         }
     }
 };
