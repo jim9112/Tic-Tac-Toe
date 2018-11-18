@@ -55,39 +55,39 @@ startButton.addEventListener('click', (e) => {
 
 const beginGame = () => {
         player1.className = 'players active'; 
-        nextMove();
 };
 
+// checks for clicks on boxes and enters player move
+boxes.addEventListener('click', (e) => {
+    if (trackIfPlayer1Turn === true) {
+        e.target.className = 'box box-filled-1';
+        trackIfPlayer1Turn = false;
+        player1.className = 'players';
+        player2.className = 'players active';
+        scoring();
+        checkForWin(0);
+    } else {
+        e.target.className = 'box box-filled-2';
+        trackIfPlayer1Turn = true;
+        player2.className = 'players';
+        player1.className = 'players active';
+        scoring();
+        checkForWin(1);
+    }
+});
 
-// function to trigger player moves
-const nextMove = () => {
-    movePreview();
-    boxes.addEventListener('click', (e) => {
-        if (trackIfPlayer1Turn === true) {
-            e.target.className = 'box box-filled-1';
-            trackIfPlayer1Turn = false;
-            player1.className = 'players';
-            player2.className = 'players active';
-        } else {
-            e.target.className = 'box box-filled-2';
-            trackIfPlayer1Turn = true;
-            player2.className = 'players';
-            player1.className = 'players active';
-        }
-    });
-};
-
-// function to preview the players move when the mouse is hovered over
-const movePreview = () => {
+// checks for mouse hover and generates preview
 boxes.addEventListener('mouseover', (e)=>{
     if (trackIfPlayer1Turn && e.target.className === 'box'){
         e.target.style = 'background-image: url(img/o.svg);';
     } else if(!trackIfPlayer1Turn && e.target.className === 'box'){
         e.target.style = 'background-image: url(img/x.svg);';
     }
-boxes.addEventListener('mouseout', (e) => e.target.style = '');
 });
-};
+
+// checks for mouse exit and removes preview
+boxes.addEventListener('mouseout', (e) => e.target.style = '');
+
 // Function checks the board and adjusts each players score
 const scoring = () => {
     for (i=0; i<box.length;i++){
@@ -103,7 +103,6 @@ const checkForWin = (player) => {
     for (i=0; i<winningNumbers.length; i=i+3){
         let answerArr = [winningNumbers[i], winningNumbers[i+1], winningNumbers[i+2]];
         tempArr = [players[player].playerScore[answerArr[0]], players[player].playerScore[answerArr[1]], players[player].playerScore[answerArr[2]]];
-        console.log(tempArr);
         if (tempArr[0] === 1 && tempArr[1] === 1 && tempArr[2] === 1){
             console.log('winner');
         }
