@@ -136,14 +136,14 @@
     
     // checks for clicks on boxes and enters player move
     boxes.addEventListener('click', (e) => {
-        if (trackIfPlayer1Turn === true) {
+        if (trackIfPlayer1Turn === true && e.target.className === 'box') {
             e.target.className = 'box box-filled-1';
             trackIfPlayer1Turn = false;
             player1.className = 'players';
             player2.className = 'players active';
             gameControls.scoring();
             gameControls.checkForWin(playerData.player1Score);
-        } else {
+        } else if (trackIfPlayer1Turn === false && e.target.className === 'box') {
             e.target.className = 'box box-filled-2';
             trackIfPlayer1Turn = true;
             player2.className = 'players';
