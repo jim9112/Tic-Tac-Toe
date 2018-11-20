@@ -6,8 +6,10 @@
     const boxes = document.querySelector('.boxes');
     const box = document.getElementsByClassName("box");
     var trackIfPlayer1Turn = true;
-    // An array of objects that save data about the two players
+    let trackTurns = 0;
+    // Winning combinations
     const winningNumbers = [0, 1, 2, 0, 3, 6, 3, 4, 5, 6, 7, 8, 1, 4, 7, 2, 5, 8, 0, 4, 8, 2, 4, 6];
+    // stores player data throughout game
     const playerData = {
         player1Class: 'box box-filled-1',
         player1Score: [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -70,38 +72,39 @@
     },
         // Function checks the board and adjusts each players score
         scoring: () => {
-            let trackTurns = 0;
+            trackTurns += 1;
+            console.log(trackTurns);
             for (i = 0; i < box.length; i++) {      
                 if (box[i].className === 'box box-filled-1') {
                     playerData.player1Score[i] = 1;
-                    trackTurns += 1;
                 } else if (box[i].className === 'box box-filled-2') {
                     playerData.player2Score[i] = 1;
-                    trackTurns += 1;
-                }   
-            }
-            // triggers tie screen if all spots are used and no winner
-            if (trackTurns === 9){
-                screens.changeElement(board, 'none');
-                screens.createPage(screens.tie.setClass, screens.tie.setID, screens.tie.setContent);
-                gameControls.resetGame();
-                eventListener.startButton();
-            }
+                }
+            } 
         },
-        // checks to see if current player has won
+        // checks to see if current player has won/also checks for ties
         checkForWin: (player) => {
+            var win = false;
             for (i = 0; i < winningNumbers.length; i = i + 3) {  
                 var k = [winningNumbers[i],winningNumbers[i+1],winningNumbers[i+2]];
                 if (player[k[0]] === 1 && player[k[[1]]] === 1 && player[k[2]] === 1) {
                     screens.changeElement(board, 'none');
                     if (player === playerData.player1Score){
+                        win = true;
                         screens.createPage(screens.oWin.setClass, screens.oWin.setID, screens.oWin.setContent);
-                    } else {
+                    } else if (player === playerData.player2Score){
+                        win =true;
                         screens.createPage(screens.xWin.setClass, screens.xWin.setID, screens.xWin.setContent);
-                    }
-                    // gameControls.resetGame();
+                    } 
                     eventListener.startButton();
                 } 
+            }
+            // checks for ties
+            if (trackTurns === 9 && win === false){
+                screens.changeElement(board, 'none');
+                screens.createPage(screens.tie.setClass, screens.tie.setID, screens.tie.setContent);
+                gameControls.resetGame();
+                eventListener.startButton();
             }
         },
         // resets game parameters
@@ -110,6 +113,7 @@
             playerData.player2Score = [0, 0, 0, 0, 0, 0, 0, 0, 0];
             trackIfPlayer1Turn = true;
             player2.className = 'players';
+            trackTurns = 0;
             for (i=0; i<box.length; i++){
                 box[i].className = 'box';
             }
