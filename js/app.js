@@ -31,12 +31,20 @@
             setContent: '<header><h1>Tic Tac Toe</h1><a href="#" class="button">Start game</a></header>'
         },
         oWin: {
-            setClass: 'screen screen-win',
+            setClass: 'screen screen-win screen-win-one',
             setID: 'finish',
-            setContent: '<header> <h1>Tic Tac Toe</h1> <p class="message"></p> <a href="#" class="button">New game</a> </header>'
+            setContent: '<header> <h1>Tic Tac Toe</h1> <p class="message">O Wins!!!</p> <a href="#" class="button">New game</a> </header>'
         },
-        xWin: {},
-        tie: {},
+        xWin: {
+            setClass: 'screen screen-win screen-win-two',
+            setID: 'finish',
+            setContent: '<header> <h1>Tic Tac Toe</h1> <p class="message">X Wins!!!</p> <a href="#" class="button">New game</a> </header>'
+        },
+        tie: {
+            setClass: 'screen screen-win screen-win-tie',
+            setID: 'finish',
+            setContent: '<header> <h1>Tic Tac Toe</h1> <p class="message"> Tie!!!</p> <a href="#" class="button">New game</a> </header>'
+        },
         // Creates div for screen changes
         createConstructor: () => {
             const newScreen = document.createElement('div');
@@ -66,12 +74,21 @@
         beginGame: () => player1.className = 'players active',
         // Function checks the board and adjusts each players score
         scoring: () => {
-            for (i = 0; i < box.length; i++) {
+            let trackTurns = 0;
+            for (i = 0; i < box.length; i++) {      
                 if (box[i].className === 'box box-filled-1') {
                     players[0].playerScore[i] = 1;
+                    trackTurns += 1;
                 } else if (box[i].className === 'box box-filled-2') {
                     players[1].playerScore[i] = 1;
-                }
+                    trackTurns += 1;
+                }   
+            }
+            if (trackTurns === 9){
+                screens.changeElement(board, 'none');
+                screens.createPage(screens.tie.setClass, screens.tie.setID, screens.tie.setContent);
+                gameControls.resetGame();
+                eventListener.startButton();
             }
         },
         // checks to see if current player has won
@@ -81,8 +98,12 @@
                 tempArr = [players[player].playerScore[answerArr[0]], players[player].playerScore[answerArr[1]], players[player].playerScore[answerArr[2]]];
                 if (tempArr[0] === 1 && tempArr[1] === 1 && tempArr[2] === 1) {
                     screens.changeElement(board, 'none');
+                    if (player === 0){
+                        screens.createPage(screens.oWin.setClass, screens.oWin.setID, screens.oWin.setContent);
+                    } else {
+                        screens.createPage(screens.xWin.setClass, screens.xWin.setID, screens.xWin.setContent);
+                    }
                     gameControls.resetGame();
-                    screens.createPage(screens.oWin.setClass, screens.oWin.setID, screens.oWin.setContent);
                     eventListener.startButton();
                 }
             }
@@ -110,7 +131,6 @@
             });
         }
     };
-   
     
     // brings up start page and hides the game board
     screens.createConstructor();
@@ -118,7 +138,6 @@
     screens.createPage(screens.startScreen.setClass, screens.startScreen.setID, screens.startScreen.setContent);
     eventListener.startButton();
     
-
     // checks for clicks on boxes and enters player move
     boxes.addEventListener('click', (e) => {
         if (trackIfPlayer1Turn === true) {
